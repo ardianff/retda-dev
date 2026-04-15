@@ -1,0 +1,54 @@
+
+@php
+    // $nilai = '';
+    // if ($tarif->bukan_nilai == 1) {
+    //     $nilai = $tarif->nilai;
+    // } elseif ($tarif->up != 0) {
+    //     $nilai = $tarif->nilai;
+    // } elseif ($tarif->nilai != 0) {
+    //     $nilai = number_format($tarif->nilai, 0, ',', '.');
+    // }else {
+    //     $nilai='';
+    // }
+@endphp
+@if ($tarif->status == 1)
+<tr >
+    <td>{{ $tarif->number }}</td>
+    <td style="padding-left: 5px;">
+       {{ $tarif->uraian }}
+    </td>
+    <td style="text-align: center;">{{ $tarif->satuan?->uraian ?? '' }}</td>
+    @if ($tarif->jenis_id == 16)
+    <td style="text-align:right">{{ $tarif->sarana != 0 ? number_format($tarif->sarana, 0, ',', '.') : '' }}@if ($tarif->format_tarif == 'bukan_rupiah')
+        {{$tarif->bkn_nilai}}
+    @endif</td>
+    <td style="text-align:right">{{ $tarif->layanan != 0 ? number_format($tarif->layanan, 0, ',', '.') : '' }}@if ($tarif->format_tarif == 'bukan_rupiah')
+        {{$tarif->bkn_nilai}}
+    @endif</td>
+    <td style="text-align:right">
+        {{ $tarif->nilai !== null && $tarif->nilai != 0 ? number_format((float) $tarif->nilai, 0, ',', '.') : '' }}@if ($tarif->format_tarif == 'bukan_rupiah')
+        {{$tarif->bkn_nilai}}
+    @endif
+    </td>
+    
+      
+    @else
+    <td style="text-align:right">
+        {{ $tarif->nilai !== null && $tarif->nilai != 0 ? number_format((float) $tarif->nilai, 0, ',', '.') : '' }}@if ($tarif->format_tarif == 'bukan_rupiah')
+        {{$tarif->bkn_nilai}}
+    @endif
+    </td>
+    
+
+        
+    @endif
+    <td>{{ isset($tarif->keterangan) ? $tarif->keterangan : '' }}
+    </td>
+</tr>
+
+@if ($tarif->children->count() > 0)
+    @foreach ($tarif->children as $child)
+        @include('print.lampiran.partialpdf', ['tarif' => $child])
+    @endforeach
+@endif
+@endif
